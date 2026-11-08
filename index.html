@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090e24">
+<title>Esi &amp; Kwesi | Written in the Stars</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --night:#090e24;
+  --blue:#111c3b;
+  --blue-light:#24345c;
+  --gold:#d7b879;
+  --gold-light:#f1dfb8;
+  --silver:#dde2f0;
+  --cream:#f8f0df;
+}
+
+* { box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  margin:0;
+  background:var(--night);
+  color:var(--cream);
+  font-family:'Montserrat',sans-serif;
+  font-size:16px;
+  overflow-x:hidden;
+}
+
+button,input,select { font:inherit; }
+
+/* OPENING SKY */
+.hero {
+  min-height:100vh;
+  min-height:100svh;
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  padding:60px 18px;
+  background:
+    radial-gradient(ellipse at 50% 40%,#26345b 0%,#111a38 38%,#090e24 80%);
+}
+
+/* intro and invitation share the same cell so the intro sits dead centre */
+.intro,
+.invitation-stage {
+  grid-area:1 / 1;
+}
+
+.sky-glow {
+  position:absolute;
+  width:500px;
+  height:500px;
+  max-width:100%;
+  border-radius:50%;
+  top:5%;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(129,149,198,.12);
+  filter:blur(100px);
+}
+
+.stars {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star {
+  position:absolute;
+  width:2px;
+  height:2px;
+  border-radius:50%;
+  background:white;
+  box-shadow:0 0 8px 2px rgba(255,255,255,.4);
+  animation:twinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity:.15; transform:scale(.7); }
+  to { opacity:1; transform:scale(1.5); }
+}
+
+.shooting-star {
+  position:absolute;
+  width:100px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#fff,#d7b879,transparent);
+  transform:rotate(-35deg);
+  opacity:0;
+  animation:shoot 7s linear infinite;
+}
+
+@keyframes shoot {
+  0%,75% { opacity:0; transform:translate(0,0) rotate(-35deg); }
+  78% { opacity:1; }
+  85% { opacity:0; transform:translate(-220px,130px) rotate(-35deg); }
+  100% { opacity:0; }
+}
+
+/* crescent moon, drawn with an inset shadow so no hardcoded cutout colour */
+.moon {
+  position:absolute;
+  top:6%;
+  right:8%;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  box-shadow:inset -22px 6px 0 0 #f1dfb8;
+  filter:drop-shadow(0 0 14px rgba(241,223,184,.55));
+  opacity:.85;
+  pointer-events:none;
+}
+
+.intro {
+  position:relative;
+  z-index:4;
+  text-align:center;
+  width:100%;
+  max-width:560px;
+  transition:opacity 1s,transform 1s,visibility 1s;
+}
+
+.intro .eyebrow {
+  font-size:14px;
+  letter-spacing:4px;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin:0;
+}
+
+.intro h1 {
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(68px,15vw,110px);
+  font-weight:400;
+  color:var(--gold-light);
+  margin:20px 0;
+  text-shadow:0 0 30px rgba(215,184,121,.25);
+}
+
+.intro p.tagline {
+  color:var(--silver);
+  font-size:14px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin:0;
+}
+
+.enter {
+  margin-top:34px;
+  padding:17px 34px;
+  border:1px solid var(--gold);
+  background:transparent;
+  color:var(--gold-light);
+  font-size:14px;
+  font-weight:500;
+  letter-spacing:3px;
+  cursor:pointer;
+  transition:background .3s,color .3s;
+}
+
+.enter:hover,
+.enter:focus-visible {
+  background:var(--gold);
+  color:var(--night);
+  outline:none;
+}
+
+.hero.started .intro {
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-20px);
+  pointer-events:none;
+}
+
+/* INVITATION */
+.invitation-stage {
+  position:relative;
+  z-index:2;
+  width:min(560px,94vw);
+  text-align:center;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(35px) scale(.94);
+  transition:opacity 1.8s,transform 2s,visibility 0s 2s;
+}
+
+.hero.started .invitation-stage {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  transition:opacity 1.8s .4s,transform 2s .4s,visibility 0s;
+}
+
+.constellation {
+  width:min(260px,65vw);
+  margin:0 auto 12px;
+  overflow:visible;
+  display:block;
+}
+
+.constellation path {
+  fill:none;
+  stroke:var(--gold);
+  stroke-width:1;
+  stroke-dasharray:400;
+  stroke-dashoffset:400;
+}
+
+.hero.started .constellation path {
+  animation:draw 4s 1s forwards;
+}
+
+.constellation circle {
+  fill:var(--gold-light);
+  filter:drop-shadow(0 0 5px var(--gold));
+}
+
+@keyframes draw {
+  to { stroke-dashoffset:0; }
+}
+
+.small-label {
+  font-size:14px;
+  font-weight:500;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0;
+}
+
+.names {
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(76px,17vw,118px);
+  font-weight:400;
+  line-height:1;
+  color:var(--gold-light);
+  margin:15px 0 0;
+  text-shadow:0 0 30px rgba(215,184,121,.3);
+}
+
+.ampersand {
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;
+  color:var(--silver);
+  font-style:italic;
+  margin:0;
+}
+
+.divider {
+  width:90px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:26px auto;
+}
+
+.message {
+  max-width:440px;
+  margin:20px auto;
+  font-family:'Cormorant Garamond',serif;
+  font-size:25px;
+  font-weight:500;
+  line-height:1.55;
+  color:#f0f1f8;
+}
+
+.photo-frame {
+  width:220px;
+  height:250px;
+  margin:30px auto;
+  padding:7px;
+  border:1px solid var(--gold);
+  border-radius:110px 110px 8px 8px;
+  background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(215,184,121,.1));
+  box-shadow:0 0 30px rgba(215,184,121,.15);
+}
+
+.photo-frame img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:105px 105px 4px 4px;
+  display:block;
+}
+
+.date {
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;
+  font-weight:500;
+  color:var(--gold-light);
+  margin:22px 0;
+}
+
+/* DETAILS */
+.section {
+  padding:80px 20px;
+  text-align:center;
+  background:#101831;
+  color:var(--cream);
+}
+
+.section.alt {
+  background:#e9e8ed;
+  color:#18213a;
+}
+
+.inner {
+  max-width:750px;
+  margin:auto;
+}
+
+.label {
+  font-size:14px;
+  font-weight:500;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0;
+}
+
+.alt .label { color:#7a6234; }
+
+.heading {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(42px,9vw,58px);
+  font-weight:500;
+  margin:15px 0;
+}
+
+.copy {
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;
+  font-weight:500;
+  line-height:1.6;
+  opacity:.95;
+}
+
+.countdown {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:35px 0;
+}
+
+.time {
+  min-width:80px;
+  padding:18px 12px;
+  border:1px solid rgba(215,184,121,.55);
+}
+
+.time strong {
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:40px;
+  font-weight:500;
+  color:var(--gold-light);
+}
+
+.time span {
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--silver);
+}
+
+.alt .time strong { color:#354263; }
+.alt .time span { color:#4a5570; }
+
+.details-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin:35px 0;
+}
+
+.detail {
+  padding:28px 15px;
+  border:1px solid rgba(215,184,121,.45);
+}
+
+.alt .detail { border-color:#b8ab93; }
+
+.detail .icon {
+  font-size:28px;
+  color:var(--gold);
+}
+
+.alt .detail .icon { color:#7a6234; }
+
+.detail h3 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;
+  font-weight:500;
+  margin:8px 0;
+}
+
+.detail p {
+  font-size:17px;
+  line-height:1.7;
+  opacity:.95;
+  margin:0;
+}
+
+.button-row {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:20px;
+}
+
+.button {
+  display:inline-block;
+  padding:15px 26px;
+  border:1px solid #7a6234;
+  color:inherit;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:2px;
+  transition:background .3s,color .3s;
+}
+
+.button:hover,
+.button:focus-visible {
+  background:#18213a;
+  color:var(--cream);
+  outline:none;
+}
+
+.rsvp-form {
+  max-width:460px;
+  margin:30px auto;
+  text-align:left;
+}
+
+.rsvp-form label {
+  display:block;
+  margin:18px 0 8px;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:2px;
+}
+
+.rsvp-form input,
+.rsvp-form select {
+  width:100%;
+  padding:15px;
+  font-size:16px;
+  border:1px solid rgba(215,184,121,.6);
+  background:rgba(255,255,255,.08);
+  color:inherit;
+}
+
+.rsvp-form input::placeholder { color:rgba(248,240,223,.6); }
+
+.rsvp-form select option { color:#222; }
+
+.rsvp-form button {
+  width:100%;
+  margin-top:22px;
+  padding:17px;
+  background:var(--gold);
+  border:0;
+  color:var(--night);
+  font-weight:500;
+  letter-spacing:3px;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.rsvp-form input:focus-visible,
+.rsvp-form select:focus-visible,
+.rsvp-form button:focus-visible {
+  outline:2px solid var(--gold-light);
+  outline-offset:2px;
+}
+
+#response {
+  text-align:center;
+  margin-top:15px;
+  font-size:16px;
+}
+
+footer {
+  padding:60px 20px;
+  text-align:center;
+  background:#070b19;
+}
+
+footer h2 {
+  font-family:'Great Vibes',cursive;
+  font-size:64px;
+  color:var(--gold-light);
+  font-weight:400;
+  margin:10px;
+}
+
+footer p {
+  font-size:13px;
+  letter-spacing:3px;
+  color:var(--silver);
+  text-transform:uppercase;
+  margin:0;
+}
+
+.reveal {
+  opacity:0;
+  transform:translateY(25px);
+  transition:opacity 1s,transform 1s;
+}
+
+.reveal.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media(max-width:600px) {
+  .moon { width:56px;height:56px;right:6%;top:3%;box-shadow:inset -15px 5px 0 0 #f1dfb8; }
+  .details-grid { grid-template-columns:1fr; }
+  .hero { padding:70px 14px 50px; }
+  .message { font-size:24px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .star,.shooting-star { animation:none; opacity:.6; }
+  .constellation path { animation:none !important; stroke-dashoffset:0; }
+  .reveal { opacity:1; transform:none; transition:none; }
+  .invitation-stage,.hero.started .invitation-stage,.intro { transition-duration:.01s; transition-delay:0s; }
+  html { scroll-behavior:auto; }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero" id="hero">
+  <div class="sky-glow"></div>
+  <div class="stars" id="stars"></div>
+  <div class="moon"></div>
+  <div class="shooting-star" style="top:25%;left:75%"></div>
+
+  <div class="intro">
+    <p class="eyebrow">Written in the stars</p>
+    <h1>Esi &amp; Kwesi</h1>
+    <p class="tagline">A beautiful forever begins</p>
+    <button class="enter" onclick="revealInvitation()">DISCOVER OUR STORY</button>
+  </div>
+
+  <div class="invitation-stage">
+    <svg class="constellation" viewBox="0 0 260 150" aria-hidden="true">
+      <path d="M30 105 L78 40 L130 65 L180 20 L225 85 L165 120 L130 65 L78 40"/>
+      <path d="M30 105 L80 130 L130 65 L165 120 L225 85"/>
+      <circle cx="30" cy="105" r="3"/>
+      <circle cx="78" cy="40" r="3"/>
+      <circle cx="130" cy="65" r="4"/>
+      <circle cx="180" cy="20" r="3"/>
+      <circle cx="225" cy="85" r="3"/>
+      <circle cx="165" cy="120" r="3"/>
+      <circle cx="80" cy="130" r="2"/>
+    </svg>
+
+    <p class="small-label">Together with their families</p>
+
+    <h1 class="names">Esi</h1>
+    <div class="ampersand">&amp;</div>
+    <h1 class="names">Kwesi</h1>
+
+    <div class="divider"></div>
+
+    <p class="message">
+      Under a thousand stars and with hearts full of joy,
+      we invite you to witness the beginning of our forever.
+    </p>
+
+    <div class="photo-frame">
+      <img src="https://i.postimg.cc/pLggJqMg/IMG-8718.jpg" alt="Esi and Kwesi">
+    </div>
+
+    <p class="small-label">The wedding celebration</p>
+    <p class="date">Thursday · 10 December 2026</p>
+    <div class="divider"></div>
+    <p class="small-label">One love · One lifetime · Forever</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="inner reveal">
+    <p class="label">Our special day</p>
+    <h2 class="heading">A Date with Forever</h2>
+    <p class="copy">The stars are aligning for a beautiful new beginning.</p>
+
+    <div class="countdown">
+      <div class="time"><strong id="days">00</strong><span>Days</span></div>
+      <div class="time"><strong id="hours">00</strong><span>Hours</span></div>
+      <div class="time"><strong id="minutes">00</strong><span>Minutes</span></div>
+      <div class="time"><strong id="seconds">00</strong><span>Seconds</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="inner reveal">
+    <p class="label">Save the date</p>
+    <h2 class="heading">Wedding Details</h2>
+
+    <div class="details-grid">
+      <div class="detail">
+        <div class="icon">✧</div>
+        <h3>The Date</h3>
+        <p>Thursday<br>10 December 2026</p>
+      </div>
+
+      <div class="detail">
+        <div class="icon">◷</div>
+        <h3>The Time</h3>
+        <p>9:00 in the morning</p>
+      </div>
+
+      <div class="detail" style="grid-column:1/-1">
+        <div class="icon">⌖</div>
+        <h3>The Venue</h3>
+        <p>Church of Christ<br>Cantonments, Accra</p>
+        <div class="button-row">
+          <a class="button" href="https://www.google.com/maps/search/?api=1&query=Church+of+Christ+Cantonments+Accra" target="_blank" rel="noopener">VIEW LOCATION</a>
+          <a class="button" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Esi+%26+Kwesi+Wedding&dates=20261210T090000Z/20261210T130000Z&location=Church+of+Christ+Cantonments+Accra" target="_blank" rel="noopener">ADD TO CALENDAR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="inner reveal">
+    <p class="label">We hope you can join us</p>
+    <h2 class="heading">Kindly RSVP</h2>
+    <p class="copy">Your presence will make our celebration complete.</p>
+
+    <form class="rsvp-form" id="rsvpForm">
+      <label for="guest">YOUR NAME</label>
+      <input id="guest" required placeholder="Enter your full name">
+
+      <label for="attendance">WILL YOU BE ATTENDING?</label>
+      <select id="attendance" required>
+        <option value="">Please select</option>
+        <option>Joyfully accepts</option>
+        <option>Regretfully declines</option>
+      </select>
+
+      <label for="guests">NUMBER OF GUESTS</label>
+      <select id="guests">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+
+      <button type="submit">SEND RSVP</button>
+      <div id="response"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>With love,</p>
+  <h2>Esi &amp; Kwesi</h2>
+  <p>Written in the stars · Forever begins</p>
+</footer>
+
+<script>
+const stars = document.getElementById('stars');
+
+for (let i=0; i<100; i++) {
+  const star = document.createElement('span');
+  star.className = 'star';
+  star.style.left = Math.random()*100+'%';
+  star.style.top = Math.random()*100+'%';
+  star.style.animationDelay = Math.random()*4+'s';
+  star.style.animationDuration = 2+Math.random()*4+'s';
+  stars.appendChild(star);
+}
+
+function revealInvitation() {
+  document.getElementById('hero').classList.add('started');
+  window.scrollTo({ top:0 });
+}
+
+/* sections fade in on scroll, active from page load */
+const revealEls = document.querySelectorAll('.reveal');
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:.12});
+  revealEls.forEach(el => observer.observe(el));
+} else {
+  revealEls.forEach(el => el.classList.add('visible'));
+}
+
+const weddingDate = new Date('2026-12-10T09:00:00+00:00');
+
+function updateCountdown() {
+  const diff = weddingDate-new Date();
+  const ids = ['days','hours','minutes','seconds'];
+
+  if (diff<=0) {
+    ids.forEach(id => document.getElementById(id).textContent='00');
+    return;
+  }
+
+  const values = [
+    Math.floor(diff/86400000),
+    Math.floor(diff/3600000)%24,
+    Math.floor(diff/60000)%60,
+    Math.floor(diff/1000)%60
+  ];
+
+  ids.forEach((id,i) => {
+    document.getElementById(id).textContent=String(values[i]).padStart(2,'0');
+  });
+}
+
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+document.getElementById('rsvpForm').addEventListener('submit',function(e) {
+  e.preventDefault();
+
+  const data = {
+    name:document.getElementById('guest').value,
+    attendance:document.getElementById('attendance').value,
+    guests:document.getElementById('guests').value
+  };
+
+  const saved = JSON.parse(localStorage.getItem('constellationRSVP')||'[]');
+  saved.push(data);
+  localStorage.setItem('constellationRSVP',JSON.stringify(saved));
+
+  document.getElementById('response').textContent=
+    'Thank you! Your response has been saved on this device.';
+
+  this.reset();
+});
+</script>
+
+</body>
+</html>
